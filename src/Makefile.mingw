@@ -32,16 +32,14 @@ DLLTOOL = dlltool
 #Define the resource compiler.
 RC = windres
 
-PERL=perl
-
 # Define the ´copy´ command.
-CP     = $(PERL) -MExtUtils::Command -e cp --
+CP = cp
 
-# Define the mkpath´ command.
-MKPATH = $(PERL) -MExtUtils::Command -e mkpath --
+# Define the ´mkdir´ command.
+MD = mkdir
 
 # Define the ´remove´ command.
-RM_F   = $(PERL) -MExtUtils::Command -e rm_f --
+RM = rm
 
 # Define additional libraries needed.
 # libstdc++ is included by default with MinGW, however for
@@ -75,7 +73,7 @@ RCFLAGS ?= -DNDEBUG
 LDFLAGS ?= -s -shared -static -Wl,-soname,$(SOLIBNAME) $(WIN32_LDFLAGS)
 DLLTOOLFLAGS ?= --add-stdcall-underscore
 
-TARGET = freeimage
+TARGET = FreeImage
 STATICLIB = lib$(TARGET).a
 SHAREDLIB = $(TARGET).dll
 IMPORTLIB = $(TARGET).lib
@@ -127,7 +125,7 @@ $(SHAREDLIB): $(EXPORTLIB) $(RESOURCE)
 	$(LD) $(LDFLAGS) -o $@ $(EXPORTLIB) $(MODULES) $(RESOURCE) $(LIBRARIES)
 
 $(DISTDIR):
-	$(MKPATH) $(DISTDIR)
+	$(MD) "$(DISTDIR)"
 
 $(TARGETDIST): $(DISTDIR)
 
@@ -135,4 +133,4 @@ install:
 	$(CP) $(SHAREDLIB) $(INSTALLDIR)
 
 clean:
-	$(RM_F) core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)
+	$(RM) -f core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)
