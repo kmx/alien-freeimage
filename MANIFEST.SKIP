@@ -31,3 +31,4 @@ sharedir/.+/
 ^src/Examples 
 /nul$
 ^Alien-
+^src\.

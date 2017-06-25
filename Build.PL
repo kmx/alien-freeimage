@@ -43,9 +43,13 @@ my $builder = $package->new(
   no_index           => { directory => ['src'] },
   meta_merge => {
     resources => {
-      bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-FreeImage',
-      repository => 'http://github.com/kmx/alien-freeimage',
+      repository => 'https://github.com/kmx/alien-freeimage',
+      bugtracker => 'https://github.com/kmx/alien-freeimage/issues',
     },
+  },
+  dist => {
+      ($^O eq 'MSWin32' ? (TAR => 'ptar', TARFLAGS => '-c -C -f') : (TARFLAGS => '--owner=0 --group=0 -cvf')),
+      PREOP => 'perldoc -u lib/Alien/FreeImage.pm | pod2markdown > README.md',
   },
 );
 
