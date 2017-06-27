@@ -6,6 +6,7 @@ use base 'My::Builder';
 
 use Config;
 my $makefile = 'Makefile.gnu';
+$makefile = 'Makefile.solaris' if $^O eq 'solaris';
 
 sub make_clean {
   my $self = shift;
