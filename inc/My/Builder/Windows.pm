@@ -20,7 +20,10 @@ sub make_inst {
   my ($self, $prefixdir) = @_;
   my $err;
   $prefixdir =~ s|\\|/|g; # gnu make does not like \
-  rename 'Source/LibJXR/common/include/guiddef.h', 'Source/LibJXR/common/include/guiddef.h.XXX' if -f 'Source/LibJXR/common/include/guiddef.h';
+
+  if (-f 'Source/LibJXR/common/include/guiddef.h' && $Config{gccversion} !~ /^3\./) {
+    rename 'Source/LibJXR/common/include/guiddef.h', 'Source/LibJXR/common/include/guiddef.h.XXX';
+  }
   
   if($Config{make} =~ /nmake/ && $Config{cc} =~ /cl/) { # MSVC compiler
     my @cmd = ( 'nmake', '-f', 'Makefile.nmake', "DISTDIR=$prefixdir", "FREEIMAGE_LIBRARY_TYPE=STATIC", "all" );
