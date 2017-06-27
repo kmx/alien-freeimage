@@ -56,5 +56,3 @@ my $builder = $package->new(
 $builder->create_build_script();
 # delete build marker (= force rebuild after running Build.PL)
 unlink 'build_done';
-# renaming guiddef.h >> guiddef.h.XXX is mingw hack (this returns file back)
-rename 'src/Source/LibJXR/common/include/guiddef.h.XXX', 'src/Source/LibJXR/common/include/guiddef.h' if -f 'src/Source/LibJXR/common/include/guiddef.h.XXX';

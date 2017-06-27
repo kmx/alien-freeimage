@@ -32,14 +32,16 @@ DLLTOOL = dlltool
 #Define the resource compiler.
 RC = windres
 
+PERL=perl
+
 # Define the ´copy´ command.
-CP = cp
+CP = $(PERL) -MExtUtils::Command -e cp --
 
 # Define the ´mkdir´ command.
-MD = mkdir
+MKPATH = $(PERL) -MExtUtils::Command -e mkpath --
 
 # Define the ´remove´ command.
-RM = rm
+RM_F = $(PERL) -MExtUtils::Command -e rm_f --
 
 # Define additional libraries needed.
 # libstdc++ is included by default with MinGW, however for
@@ -125,7 +127,7 @@ $(SHAREDLIB): $(EXPORTLIB) $(RESOURCE)
 	$(LD) $(LDFLAGS) -o $@ $(EXPORTLIB) $(MODULES) $(RESOURCE) $(LIBRARIES)
 
 $(DISTDIR):
-	$(MD) "$(DISTDIR)"
+	$(MKPATH) $(DISTDIR)
 
 $(TARGETDIST): $(DISTDIR)
 
@@ -133,4 +135,4 @@ install:
 	$(CP) $(SHAREDLIB) $(INSTALLDIR)
 
 clean:
-	$(RM) -f core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)
+	$(RM_F) core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)

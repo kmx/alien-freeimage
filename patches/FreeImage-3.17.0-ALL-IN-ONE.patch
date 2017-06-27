@@ -40,16 +40,77 @@ diff -ru src.3170/Makefile.gnu src/Makefile.gnu
  	@$(DOS2UNIX) $(SRCS) $(INCLS)
 diff -ru src.3170/Makefile.mingw src/Makefile.mingw
 --- src.3170/Makefile.mingw	2015-03-08 17:04:12.000000000 +0100
-+++ src/Makefile.mingw	2017-06-22 23:00:22.309915400 +0200
-@@ -125,7 +125,7 @@
++++ src/Makefile.mingw	2017-06-27 10:00:56.255544400 +0200
+@@ -32,14 +32,16 @@
+ #Define the resource compiler.
+ RC = windres
+ 
++PERL=perl
++
+-CP = cp
++CP = $(PERL) -MExtUtils::Command -e cp --
+ 
+-MD = mkdir
++MKPATH = $(PERL) -MExtUtils::Command -e mkpath --
+ 
+-RM = rm
++RM_F = $(PERL) -MExtUtils::Command -e rm_f --
+ 
+ # Define additional libraries needed.
+ # libstdc++ is included by default with MinGW, however for
+@@ -125,7 +127,7 @@
  	$(LD) $(LDFLAGS) -o $@ $(EXPORTLIB) $(MODULES) $(RESOURCE) $(LIBRARIES)
  
  $(DISTDIR):
 -	$(MD) $(DISTDIR)
-+	$(MD) "$(DISTDIR)"
++	$(MKPATH) $(DISTDIR)
  
  $(TARGETDIST): $(DISTDIR)
  
+@@ -133,4 +135,4 @@
+ 	$(CP) $(SHAREDLIB) $(INSTALLDIR)
+ 
+ clean:
+-	$(RM) -f core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)
++	$(RM_F) core $(DISTDIR)/*.* $(MODULES) $(RESOURCE) $(STATICLIB) $(SHAREDLIB) $(IMPORTLIB) $(EXPORTLIB)
+diff -ru src.3170/Makefile.osx src/Makefile.osx
+--- src.3170/Makefile.osx	2015-03-08 17:04:16.000000000 +0100
++++ src/Makefile.osx	2017-06-27 09:40:31.032975100 +0200
+@@ -54,11 +54,10 @@
+ 
+ all: dist
+ 
+-dist: FreeImage
+-	mkdir -p Dist
+-	cp *.a Dist/
+-	cp *.dylib Dist/
+-	cp Source/FreeImage.h Dist/
++dist: $(STATICLIB) Source/FreeImage.h
++	mkdir -p $(DISTDIR)
++	cp $(STATICLIB) $(DISTDIR)
++	cp Source/FreeImage.h $(DISTDIR)
+ 
+ FreeImage: $(STATICLIB) $(SHAREDLIB)
+ 
+diff -ru src.3170/Makefile.solaris src/Makefile.solaris
+--- src.3170/Makefile.solaris	2017-06-27 09:37:42.676030800 +0200
++++ src/Makefile.solaris	2017-06-27 09:38:35.684478900 +0200
+@@ -33,11 +33,10 @@
+ 
+ all: dist
+ 
+-dist: FreeImage
+-	mkdir -p Dist
+-	cp *.a Dist/
+-	cp *.so Dist/
+-	cp Source/FreeImage.h Dist/
++dist: $(STATICLIB) Source/FreeImage.h
++	mkdir -p $(DISTDIR)
++	cp $(STATICLIB) $(DISTDIR)
++	cp Source/FreeImage.h $(DISTDIR)
+ 
+ dos2unix:
+ 	@$(DOS2UNIX) $(SRCS) $(INCLS)
 diff -ru src.3170/Source/LibJXR/image/sys/strcodec.c src/Source/LibJXR/image/sys/strcodec.c
 --- src.3170/Source/LibJXR/image/sys/strcodec.c	2015-03-02 01:07:10.000000000 +0100
 +++ src/Source/LibJXR/image/sys/strcodec.c	2017-06-22 22:59:12.715416800 +0200
@@ -100,6 +161,15 @@ diff -ru src.3170/Source/LibRawLite/internal/dcraw_common.cpp src/Source/LibRawL
      +1,+0,+2,+1,0,0x10
    }, chood[] = { -1,-1, -1,0, -1,+1, 0,+1, +1,+1, +1,0, +1,-1, 0,-1 };
    ushort (*brow[5])[4], *pix;
+diff -ru src.3170/Source/LibRawLite/internal/libraw_x3f.cpp src/Source/LibRawLite/internal/libraw_x3f.cpp
+--- src.3170/Source/LibRawLite/internal/libraw_x3f.cpp	2014-08-31 23:45:02.000000000 +0200
++++ src/Source/LibRawLite/internal/libraw_x3f.cpp	2017-06-26 19:50:06.806762000 +0200
+@@ -1,4 +1,4 @@
+-﻿/* Library for accessing X3F Files 
++/* Library for accessing X3F Files 
+ ----------------------------------------------------------------
+ BSD-style License
+ ----------------------------------------------------------------
 diff -ru src.3170/Source/LibWebP/src/dsp/dsp.dec_mips_dsp_r2.c src/Source/LibWebP/src/dsp/dsp.dec_mips_dsp_r2.c
 --- src.3170/Source/LibWebP/src/dsp/dsp.dec_mips_dsp_r2.c	2015-03-08 20:53:02.000000000 +0100
 +++ src/Source/LibWebP/src/dsp/dsp.dec_mips_dsp_r2.c	2017-06-22 22:17:19.446910500 +0200
