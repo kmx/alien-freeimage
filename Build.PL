@@ -49,7 +49,6 @@ my $builder = $package->new(
   },
   dist => {
       ($^O eq 'MSWin32' ? (TAR => 'ptar', TARFLAGS => '-c -C -f') : (TARFLAGS => '--owner=0 --group=0 -cvf')),
-      PREOP => 'perldoc -u lib/Alien/FreeImage.pm | pod2markdown > README.md',
   },
 );
 

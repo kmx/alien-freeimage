@@ -13,7 +13,7 @@ Alien::FreeImage - Building freeimage library L<http://freeimage.sourceforge.net
 
 =cut
 
-our $VERSION = '1.000_3';
+our $VERSION = '1.001';
 
 =head1 SYNOPSIS
 
